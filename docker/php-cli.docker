@@ -1,0 +1,15 @@
+FROM php:7.1-cli
+
+
+
+RUN apt-get update && apt-get install -y libmcrypt-dev wget mysql-client git zlib1g-dev imagemagick libmagickwand-dev libjpeg62-turbo-dev libpng-dev libgd-dev  && pecl install imagick \
+    && docker-php-ext-configure gd \
+        --enable-gd-native-ttf \
+        --with-jpeg-dir=/usr/lib \
+        --with-freetype-dir=/usr/include/freetype2  \
+    && docker-php-ext-install mcrypt pdo_mysql pcntl zip gd && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/ext-imagick.ini
+
+RUN wget https://getcomposer.org/installer -O - -q | php -- --install-dir=/bin --filename=composer --quiet
+
+WORKDIR /app
+
